@@ -96,18 +96,6 @@ ENV PATH=$PATH:/usr/local/gromacs/2023.2/bin
 
 LABEL gromacs.version=2023.2
 
-# http://ftp.gromacs.org/pub/gromacs/gromacs-2020.7.tar.gz
-RUN mkdir -p /var/tmp && wget -q -nc --no-check-certificate -P /var/tmp http://ftp.gromacs.org/pub/gromacs/gromacs-2020.7.tar.gz && \
-    mkdir -p /var/tmp && tar -x -f /var/tmp/gromacs-2020.7.tar.gz -C /var/tmp -z && \
-    mkdir -p /var/tmp/gromacs-2020.7/build && cd /var/tmp/gromacs-2020.7/build && cmake -DCMAKE_INSTALL_PREFIX=/usr/local/gromacs/2020.7 -D CMAKE_BUILD_TYPE=Release -D CUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda -D GMX_BUILD_OWN_FFTW=ON -D GMX_GPU=ON -D REGRESSIONTEST_DOWNLOAD=ON /var/tmp/gromacs-2020.7 && \
-    cmake --build /var/tmp/gromacs-2020.7/build --target all -- -j$(nproc) && \
-    cmake --build /var/tmp/gromacs-2020.7/build --target install -- -j$(nproc) && \
-    rm -rf /var/tmp/gromacs-2020.7 /var/tmp/gromacs-2020.7.tar.gz
-
-ENV PATH=$PATH:/usr/local/gromacs/2020.7/bin
-
-LABEL gromacs.version=2020.7
-
 # http://ftp.gromacs.org/pub/gromacs/gromacs-2021.6.tar.gz
 RUN mkdir -p /var/tmp && wget -q -nc --no-check-certificate -P /var/tmp http://ftp.gromacs.org/pub/gromacs/gromacs-2021.6.tar.gz && \
     mkdir -p /var/tmp && tar -x -f /var/tmp/gromacs-2021.6.tar.gz -C /var/tmp -z && \
@@ -166,19 +154,12 @@ ENV LD_LIBRARY_PATH=/usr/local/openmpi/lib:$LD_LIBRARY_PATH \
 # http://ftp.gromacs.org/pub/gromacs/gromacs-2023.2.tar.gz
 COPY --from=build /usr/local/gromacs/2023.2 /usr/local/gromacs/2023.2
 
-# http://ftp.gromacs.org/pub/gromacs/gromacs-2020.7.tar.gz
-COPY --from=build /usr/local/gromacs/2020.7 /usr/local/gromacs/2020.7
-
 # http://ftp.gromacs.org/pub/gromacs/gromacs-2021.6.tar.gz
 COPY --from=build /usr/local/gromacs/2021.6 /usr/local/gromacs/2021.6
 
 ENV PATH=$PATH:/usr/local/gromacs/2023.2/bin
 
 LABEL gromacs.version=2023.2
-
-ENV PATH=$PATH:/usr/local/gromacs/2020.7/bin
-
-LABEL gromacs.version=2020.7
 
 ENV PATH=$PATH:/usr/local/gromacs/2021.6/bin
 
